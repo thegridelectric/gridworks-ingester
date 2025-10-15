@@ -21,10 +21,70 @@ ASL provides structured, validated Python types for data that needs to be:
 
 Think of it as the evolution from REST APIs (where the server dictates the contract) to shared vocabulary (where peers collaborate on equal terms).
 
-## Requirements
+## Installation
 
-- Python 3.12 or higher (uses modern type hints, Literal types, and union syntax)
-- No external dependencies (pure Python with standard library only)
+This ASL seed is designed to be integrated directly into your SCADA repository.
+
+### Requirements
+
+- Python 3.12 or higher (uses modern type hints and union syntax)
+- pydantic >= 2.5.0 (for type validation and serialization)
+- pytest >= 7.4.0 (for running tests)
+
+### Integration Steps
+
+1. **Verify Python version:**
+   ```bash
+   python --version  # Should show 3.12.x or higher
+   ```
+
+2. **Copy the `asl/` directory into your project:**
+   ```bash
+   # From your SCADA repository root
+   cp -r path/to/seed/asl src/your_package/asl
+   ```
+
+3. **Add dependencies to your project's requirements:**
+   
+   If using `requirements.txt`, add:
+   ```txt
+   pydantic>=2.5.0
+   pytest>=7.4.0
+   ```
+   
+   If using `pyproject.toml`, add:
+   ```toml
+   [project]
+   requires-python = ">=3.12"
+   dependencies = [
+       "pydantic>=2.5.0",
+   ]
+   
+   [project.optional-dependencies]
+   dev = [
+       "pytest>=7.4.0",
+   ]
+   ```
+
+4. **Update imports in your code:**
+   ```python
+   # Import from your package structure
+   from your_package.asl.types import ScadaSnapshot, ChannelReading
+   from your_package.asl.enums import RelayClosedOrOpen
+   ```
+
+5. **Verify the integration:**
+   ```bash
+   # Run the example tests
+   pytest src/your_package/asl/tests/ -v -s
+   ```
+
+### Important Notes
+
+- This is a seed, not a library - modify the types as needed for your system
+- Keep the `asl/` structure intact for future updates
+- The ASL types are self-contained with no dependencies beyond Pydantic
+- Python 3.12+ is required for modern type hints (union syntax, Literal types)
 
 ## Message Passing Patterns
 
