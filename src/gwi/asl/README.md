@@ -1,6 +1,6 @@
 # ASL (Application Shared Language) Module
 
-This directory contains the type definitions and serialization codec for the MicroEraPower SCADA application.
+This directory contains the type definitions and serialization codec for the gridworks-ingester application.
 
 The GridWorks ASL Registry at [schemas.electricity.works](https://schemas.electricity.works) is the authoritative source for all type definitions. See the [GitHub repository](https://github.com/thegridelectric/gridworks-asl) for implementation details.
 
@@ -23,7 +23,48 @@ Think of it as the evolution from REST APIs (where the server dictates the contr
 
 ## Installation
 
-This ASL seed is designed to be integrated directly into your SCADA repository.
+This ASL seed is designed to be integrated directly into your gridworks-ingester repository.
+
+
+This ASL seed is designed to be integrated directly into your gridworks-ingester repository. It expects to be a subfolder of `gwi`.
+
+### Example Project Structure
+
+If you have a repository structure like this:
+
+```
+gridworks-ingester/
+├── README.md
+├── requirements.txt
+├── tests/
+│   └── test_scada.py
+└── src/
+    └── gwi/
+        ├── __init__.py
+        └──  main.py   
+
+```
+
+After adding the ASL seed, it should look like:
+
+```
+gridwroks-ingester/
+├── README.md
+├── requirements.txt
+├── tests/
+│   └── test_scada.py
+└── src/
+    └── gwi/
+        ├── __init__.py
+        ├── main.py        
+        └── asl/             # ← ADD THIS DIRECTORY HERE
+            ├── __init__.py
+            ├── codec.py
+            ├── property_format.py
+            ├── enums/
+            ├── types/
+            └── tests/
+```
 
 ### Requirements
 
@@ -41,7 +82,7 @@ This ASL seed is designed to be integrated directly into your SCADA repository.
 2. **Copy the `asl/` directory into your project:**
    ```bash
    # From your SCADA repository root
-   cp -r path/to/seed/asl src/your_package/asl
+   cp -r path/to/seed/asl src/gwi/asl
    ```
 
 3. **Add dependencies to your project's requirements:**
@@ -69,14 +110,14 @@ This ASL seed is designed to be integrated directly into your SCADA repository.
 4. **Update imports in your code:**
    ```python
    # Import from your package structure
-   from your_package.asl.types import ScadaSnapshot, ChannelReading
-   from your_package.asl.enums import RelayClosedOrOpen
+   from gwi.asl.types import ScadaSnapshot, ChannelReading
+   from gwi.asl.enums import RelayClosedOrOpen
    ```
 
 5. **Verify the integration:**
    ```bash
    # Run the example tests
-   pytest src/your_package/asl/tests/ -v -s
+   pytest src/gwi/asl/tests/ -v -s
    ```
 
 ### Important Notes
@@ -231,17 +272,6 @@ GNodeAlias: w.isone.ma.lily.scada
 Type: scada.snapshot
 MQTT Topic: gw/w-isone-ma-lily-scada/to/ingester/scada-snapshot
 Rabbit Routing Key: gw.w-isone-ma-lily-scada.to.ingester.scada-snapshot
-```
-
-## Directory Structure
-
-```
-asl/
-├── codec.py           # Base classes and serialization engine
-├── property_format.py # Validators for GridWorks formats
-├── enums/            # Controlled vocabularies
-├── types/            # Message type definitions
-└── tests/            # Examples and validation
 ```
 
 ## Testing
